@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    // Automatically trigger build when changes are pushed to GitHub
+    triggers {
+        githubPush()     // This requires GitHub Webhook integration
+    }
+
+    environment {
+        PROJECT_NAME = "GlassLoginSignup"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo "Pulling latest code from GitHub..."
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building project: ${env.PROJECT_NAME}"
+                sh '''
+                echo "No compilation needed for HTML/CSS/JS project."
+                echo "Running basic checks..."
+                ls -l
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running basic validation..."
+                sh '''
+                if [ -f index.html ]; then
+                    echo "✅ index.html found!"
+                else
+                    echo "❌ index.html missing!"
+                    exit 1
+                fi
+                '''
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                echo "Archiving build artifacts..."
+                archiveArtifacts artifacts: '**/*.html, **/*.css, **/*.js', fingerprint: true
+            }
+        }
+
+        stage('Deploy (Optional)') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "Deployment stage - Add your deployment steps here."
+                // Example: Copy to web server, or upload to S3, etc.
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "🎉 Build completed successfully!"
+        }
+        failure {
+            echo "❌ Build failed. Check logs for details."
+        }
+    }
+}

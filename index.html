@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glass Themed Login & Signup</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">MyWebsite</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Container -->
+  <div class="container">
+    <!-- Login Form -->
+    <div class="form-box" id="loginBox">
+      <h2>Login</h2>
+      <form>
+        <div class="input-group">
+          <input type="email" id="loginEmail" required />
+          <label for="loginEmail">Email</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="loginPassword" required />
+          <label for="loginPassword">Password</label>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <p class="toggle-text">
+          Don’t have an account?
+          <a href="#" id="toSignup">Sign up</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- Signup Form -->
+    <div class="form-box hidden" id="signupBox">
+      <h2>Sign Up</h2>
+      <form>
+        <div class="input-group">
+          <input type="text" id="signupName" required />
+          <label for="signupName">Full Name</label>
+        </div>
+        <div class="input-group">
+          <input type="email" id="signupEmail" required />
+          <label for="signupEmail">Email</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="signupPassword" required />
+          <label for="signupPassword">Password</label>
+        </div>
+        <button type="submit" class="btn">Sign Up</button>
+        <p class="toggle-text">
+          Already have an account?
+          <a href="#" id="toLogin">Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
