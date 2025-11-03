@@ -1,72 +1,79 @@
 pipeline {
     agent any
 
-    // Automatically trigger build when changes are pushed to GitHub
     triggers {
-        githubPush()     // This requires GitHub Webhook integration
+        githubPush()  // Automatically trigger on GitHub push
     }
 
     environment {
         PROJECT_NAME = "GlassLoginSignup"
     }
 
+    options {
+        disableConcurrentBuilds()
+        timestamps()
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
-                echo "Pulling latest code from GitHub..."
+                echo " Pulling latest code from GitHub..."
                 checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                echo "Building project: ${env.PROJECT_NAME}"
-                sh '''
-                echo "No compilation needed for HTML/CSS/JS project."
-                echo "Running basic checks..."
-                ls -l
+                echo " Building project: ${env.PROJECT_NAME}"
+                bat '''
+                echo No compilation needed for HTML/CSS/JS project.
+                dir
                 '''
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running basic validation..."
-                sh '''
-                if [ -f index.html ]; then
-                    echo "✅ index.html found!"
-                else
-                    echo "❌ index.html missing!"
-                    exit 1
-                fi
+                echo " Checking required files..."
+                bat '''
+                if exist index.html (
+                    echo  index.html found
+                ) else (
+                    echo  index.html missing
+                    exit /b 1
+                )
+
+                if exist style.css (
+                    echo  style.css found
+                ) else (
+                    echo  style.css missing
+                    exit /b 1
+                )
+
+                if exist script.js (
+                    echo  script.js found
+                ) else (
+                    echo  script.js missing
+                    exit /b 1
+                )
                 '''
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                echo "Archiving build artifacts..."
+                echo " Archiving HTML/CSS/JS files..."
                 archiveArtifacts artifacts: '**/*.html, **/*.css, **/*.js', fingerprint: true
-            }
-        }
-
-        stage('Deploy (Optional)') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo "Deployment stage - Add your deployment steps here."
-                // Example: Copy to web server, or upload to S3, etc.
             }
         }
     }
 
     post {
         success {
-            echo "🎉 Build completed successfully!"
+            echo " Build triggered by GitHub push completed successfully!"
         }
         failure {
-            echo "❌ Build failed. Check logs for details."
+            echo " Build failed. Please check logs for errors."
         }
     }
 }
